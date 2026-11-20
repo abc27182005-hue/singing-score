@@ -195,11 +195,12 @@
 
   <script>
     const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbydtDwySHigtIAEnmdxiFHM5wX3s0dTtKIsl5yoEb20aMz9d3GNos0O7uy8EA6QUPzb/exec';
+    const MAX_CONTESTANTS = 30;
 
     // 自動產生 01 ~ 30 號參賽編號下拉選單
     (function initContestantSelect() {
       const sel = document.getElementById('contestantId');
-      for (let i = 1; i <= 30; i++) {
+      for (let i = 1; i <= MAX_CONTESTANTS; i++) {
         const numStr = String(i).padStart(2, '0');
         const opt = document.createElement('option');
         opt.value = numStr;
@@ -373,6 +374,19 @@
       }
     }
 
+    function advanceToNextContestant() {
+      const sel = document.getElementById('contestantId');
+      const currentNum = parseInt(sel.value, 10) || 1;
+      const nextNum = Math.min(MAX_CONTESTANTS, currentNum + 1);
+      sel.value = String(nextNum).padStart(2, '0');
+
+      // 清空姓名、曲目與短評，保留評審名稱
+      document.getElementById('contestantName').value = '';
+      document.getElementById('songTitle').value = '';
+      document.getElementById('comment').value = '';
+      document.getElementById('liveInfo').textContent = '按右側按鈕即可直接在網頁錄音並分析';
+    }
+
     async function submitScore() {
       const btn = document.getElementById('submitBtn');
       const status = document.getElementById('statusMsg');
@@ -400,6 +414,8 @@
       status.style.color = '#334155';
       status.textContent = '正在傳送至 Google 試算表...';
 
+      const sentScore = calcTotal().toFixed(2);
+
       try {
         await fetch(GAS_WEB_APP_URL, {
           method: 'POST',
@@ -407,9 +423,10 @@
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify(payload)
         });
+        advanceToNextContestant();
         btn.disabled = false;
         status.style.color = '#16a34a';
-        status.textContent = `✅ 已送出（${payload.contestantId} 號 ${payload.contestantName}）！加權總分：${calcTotal().toFixed(2)}`;
+        status.textContent = `✅ 已送出（${payload.contestantId} 號 ${payload.contestantName}，總分 ${sentScore}），已切換至 ${document.getElementById('contestantId').value} 號`;
       } catch (err) {
         btn.disabled = false;
         status.style.color = '#dc2626';
