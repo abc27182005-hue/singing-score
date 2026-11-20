@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>ºq°Û¤ñÁÉµû¤À¨t²Î¡]¥­ªO¤@«ö§Y¿ıª©¡^</title>
+  <title>æ­Œå”±æ¯”è³½è©•åˆ†ç³»çµ±ï¼ˆå¹³æ¿ä¸€æŒ‰å³éŒ„ç‰ˆï¼‰</title>
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
@@ -106,85 +106,85 @@
 </head>
 <body>
   <div class="container">
-    <h1>?? ºq°Û¤ñÁÉµû¤À¨t²Î</h1>
+    <h1>ğŸ¤ æ­Œå”±æ¯”è³½è©•åˆ†ç³»çµ±</h1>
 
     <div class="grid-2">
       <div>
-        <label>°ÑÁÉ½s¸¹</label>
-        <input type="text" id="contestantId" placeholder="¨Ò¦p¡G01" />
+        <label>åƒè³½ç·¨è™Ÿ</label>
+        <input type="text" id="contestantId" placeholder="ä¾‹å¦‚ï¼š01" />
       </div>
       <div>
-        <label>°ÑÁÉªÌ©m¦W</label>
-        <input type="text" id="contestantName" placeholder="½Ğ¿é¤J©m¦W" />
+        <label>åƒè³½è€…å§“å</label>
+        <input type="text" id="contestantName" placeholder="è«‹è¼¸å…¥å§“å" />
       </div>
       <div>
-        <label>ºt°Û¦±¥Ø</label>
-        <input type="text" id="songTitle" placeholder="½Ğ¿é¤Jºq¦W" />
+        <label>æ¼”å”±æ›²ç›®</label>
+        <input type="text" id="songTitle" placeholder="è«‹è¼¸å…¥æ­Œå" />
       </div>
       <div>
-        <label>µû¼f¦WºÙ</label>
-        <input type="text" id="judgeName" placeholder="¨Ò¦p¡Gµû¼fA" />
+        <label>è©•å¯©åç¨±</label>
+        <input type="text" id="judgeName" placeholder="ä¾‹å¦‚ï¼šè©•å¯©A" />
       </div>
     </div>
 
     <div class="card">
       <div class="ai-box">
         <div>
-          <strong>AI «ÈÆ[°»´ú¡]­µ·Ç»P¸`«µ 25%¡^</strong>
-          <div class="live-meter" id="liveInfo">«ö¥k°¼«ö¶s§Y¥iª½±µ¦bºô­¶¿ı­µ¨Ã¤ÀªR</div>
+          <strong>AI å®¢è§€åµæ¸¬ï¼ˆéŸ³æº–èˆ‡ç¯€å¥ 25%ï¼‰</strong>
+          <div class="live-meter" id="liveInfo">æŒ‰å³å´æŒ‰éˆ•å³å¯ç›´æ¥åœ¨ç¶²é éŒ„éŸ³ä¸¦åˆ†æ</div>
         </div>
-        <button type="button" class="btn-rec" id="recBtn" onclick="toggleRecord()">¶}©l¿ı­µ</button>
+        <button type="button" class="btn-rec" id="recBtn" onclick="toggleRecord()">é–‹å§‹éŒ„éŸ³</button>
       </div>
     </div>
 
     <div class="card">
       <div class="score-item">
         <div class="score-header">
-          <span>1. ­µ·Ç»P¸`«µ¡]25%¡^</span>
+          <span>1. éŸ³æº–èˆ‡ç¯€å¥ï¼ˆ25%ï¼‰</span>
           <span id="val-pitchRhythm">80</span>
         </div>
         <input type="range" id="pitchRhythm" min="0" max="100" value="80" oninput="calcTotal()" />
       </div>
       <div class="score-item">
         <div class="score-header">
-          <span>2. ­µ¦â¡]25%¡^</span>
+          <span>2. éŸ³è‰²ï¼ˆ25%ï¼‰</span>
           <span id="val-timbre">80</span>
         </div>
         <input type="range" id="timbre" min="0" max="100" value="80" oninput="calcTotal()" />
       </div>
       <div class="score-item">
         <div class="score-header">
-          <span>3. ºq°Û§Ş¥©¡]25%¡^</span>
+          <span>3. æ­Œå”±æŠ€å·§ï¼ˆ25%ï¼‰</span>
           <span id="val-technique">80</span>
         </div>
         <input type="range" id="technique" min="0" max="100" value="80" oninput="calcTotal()" />
       </div>
       <div class="score-item">
         <div class="score-header">
-          <span>4. ±¡·P¸àÄÀ¡]15%¡^</span>
+          <span>4. æƒ…æ„Ÿè©®é‡‹ï¼ˆ15%ï¼‰</span>
           <span id="val-emotion">80</span>
         </div>
         <input type="range" id="emotion" min="0" max="100" value="80" oninput="calcTotal()" />
       </div>
       <div class="score-item">
         <div class="score-header">
-          <span>5. ¥x­·»P¾ãÅéªí²{¡]10%¡^</span>
+          <span>5. å°é¢¨èˆ‡æ•´é«”è¡¨ç¾ï¼ˆ10%ï¼‰</span>
           <span id="val-stage">80</span>
         </div>
         <input type="range" id="stage" min="0" max="100" value="80" oninput="calcTotal()" />
       </div>
       <div>
-        <label>µû¼fµuµû</label>
-        <textarea id="comment" rows="2" placeholder="¿ï¶ñ¡Gµ¹¤©ºt°Û¦^õX..."></textarea>
+        <label>è©•å¯©çŸ­è©•</label>
+        <textarea id="comment" rows="2" placeholder="é¸å¡«ï¼šçµ¦äºˆæ¼”å”±å›é¥‹..."></textarea>
       </div>
     </div>
 
     <div class="total-box">
-      <span>¥[ÅvÁ`¤À</span>
+      <span>åŠ æ¬Šç¸½åˆ†</span>
       <span id="totalScore">80.00</span>
     </div>
 
-    <button type="button" class="btn-submit" id="submitBtn" onclick="submitScore()">°e¥Xµû¤À¦Ü¸Õºâªí</button>
+    <button type="button" class="btn-submit" id="submitBtn" onclick="submitScore()">é€å‡ºè©•åˆ†è‡³è©¦ç®—è¡¨</button>
     <div class="status-msg" id="statusMsg"></div>
   </div>
 
@@ -289,17 +289,17 @@
 
           mediaRecorder.start();
           isRecording = true;
-          btn.textContent = '°±¤î¿ı­µ¨Ã­p¤À';
+          btn.textContent = 'åœæ­¢éŒ„éŸ³ä¸¦è¨ˆåˆ†';
           btn.classList.add('recording');
-          info.textContent = '¿ı­µ¤¤... ½Ğ¹ï¥­ªO³Á§J­·ºt°Û¡A°Û§¹«ö¡u°±¤î¿ı­µ¨Ã­p¤À¡v';
+          info.textContent = 'éŒ„éŸ³ä¸­... è«‹å°å¹³æ¿éº¥å…‹é¢¨æ¼”å”±ï¼Œå”±å®ŒæŒ‰ã€Œåœæ­¢éŒ„éŸ³ä¸¦è¨ˆåˆ†ã€';
         } catch (err) {
-          info.textContent = 'µLªk±Ò°Ê¿ı­µ¡G' + (err.name || '') + ' ' + (err.message || err);
+          info.textContent = 'ç„¡æ³•å•Ÿå‹•éŒ„éŸ³ï¼š' + (err.name || '') + ' ' + (err.message || err);
         }
       } else {
         isRecording = false;
-        btn.textContent = '¶}©l¿ı­µ';
+        btn.textContent = 'é–‹å§‹éŒ„éŸ³';
         btn.classList.remove('recording');
-        info.textContent = '¥¿¦b¤ÀªR¿ı­µ­µ·Ç...';
+        info.textContent = 'æ­£åœ¨åˆ†æéŒ„éŸ³éŸ³æº–...';
         if (mediaRecorder && mediaRecorder.state !== 'inactive') {
           mediaRecorder.stop();
         }
@@ -347,12 +347,12 @@
           const aiScore = Math.round(60 + ratio * 38);
           document.getElementById('pitchRhythm').value = aiScore;
           calcTotal();
-          info.textContent = `¿ı­µ¤ÀªR§¹¦¨¡IAI °Ñ¦Ò¤À¼Æ¡G${aiScore} ¤À¡]¦³®Ä­µ°ª¤ù¬q ${validFrames} µ§¡A°Ñ¦Ò­µ°ª ${lastNote}¡^`;
+          info.textContent = `éŒ„éŸ³åˆ†æå®Œæˆï¼AI åƒè€ƒåˆ†æ•¸ï¼š${aiScore} åˆ†ï¼ˆæœ‰æ•ˆéŸ³é«˜ç‰‡æ®µ ${validFrames} ç­†ï¼Œåƒè€ƒéŸ³é«˜ ${lastNote}ï¼‰`;
         } else {
-          info.textContent = '¿ı­µ¤¤¦³®Ä¤HÁn¤ù¬q¸û¤Ö¡A«O¯d¥Ø«e¡u­µ·Ç»P¸`«µ¡v¤À¼Æ¡]¥i¤â°Ê·Æ°Ê·L½Õ¡^';
+          info.textContent = 'éŒ„éŸ³ä¸­æœ‰æ•ˆäººè²ç‰‡æ®µè¼ƒå°‘ï¼Œä¿ç•™ç›®å‰ã€ŒéŸ³æº–èˆ‡ç¯€å¥ã€åˆ†æ•¸ï¼ˆå¯æ‰‹å‹•æ»‘å‹•å¾®èª¿ï¼‰';
         }
       } catch (err) {
-        info.textContent = '­µ°T¸Ñ½X¤ÀªR¥¢±Ñ¡G' + (err && err.message ? err.message : String(err));
+        info.textContent = 'éŸ³è¨Šè§£ç¢¼åˆ†æå¤±æ•—ï¼š' + (err && err.message ? err.message : String(err));
       }
     }
 
@@ -375,13 +375,13 @@
 
       if (!payload.contestantName) {
         status.style.color = '#dc2626';
-        status.textContent = '½Ğ¥ı¶ñ¼g¡u°ÑÁÉªÌ©m¦W¡v¦A°e¥X¡I';
+        status.textContent = 'è«‹å…ˆå¡«å¯«ã€Œåƒè³½è€…å§“åã€å†é€å‡ºï¼';
         return;
       }
 
       btn.disabled = true;
       status.style.color = '#334155';
-      status.textContent = '¥¿¦b¶Ç°e¦Ü Google ¸Õºâªí...';
+      status.textContent = 'æ­£åœ¨å‚³é€è‡³ Google è©¦ç®—è¡¨...';
 
       try {
         await fetch(GAS_WEB_APP_URL, {
@@ -392,11 +392,11 @@
         });
         btn.disabled = false;
         status.style.color = '#16a34a';
-        status.textContent = `? ¤w°e¥X¡I¥[ÅvÁ`¤À¡G${calcTotal().toFixed(2)}¡]½Ğ¦Ü¸Õºâªí½T»{¡^`;
+        status.textContent = `âœ… å·²é€å‡ºï¼åŠ æ¬Šç¸½åˆ†ï¼š${calcTotal().toFixed(2)}ï¼ˆè«‹è‡³è©¦ç®—è¡¨ç¢ºèªï¼‰`;
       } catch (err) {
         btn.disabled = false;
         status.style.color = '#dc2626';
-        status.textContent = '? ¶Ç°e¥¢±Ñ¡G' + err.message;
+        status.textContent = 'âŒ å‚³é€å¤±æ•—ï¼š' + err.message;
       }
     }
   </script>
