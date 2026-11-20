@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>歌唱比賽評分系統（平板一按即錄版）</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
+      background: #f4f6f9;
+      color: #1f2937;
+      margin: 0;
+      padding: 16px;
+    }
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+    }
+    h1 { margin-top: 0; font-size: 1.5rem; }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    label { display: block; font-size: 0.95rem; font-weight: 600; margin-bottom: 5px; }
+    input[type="text"], textarea {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 1rem;
+      background: #fff;
+    }
+    .card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .ai-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .live-meter {
+      font-size: 0.95rem;
+      color: #334155;
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+    .score-item { margin-bottom: 16px; }
+    .score-header {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 6px;
+    }
+    input[type="range"] {
+      width: 100%;
+      height: 28px;
+    }
+    .total-box {
+      background: #eef2ff;
+      border: 1px solid #c7d2fe;
+      color: #1e3a8a;
+      padding: 16px 20px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+    .btn-rec { background: #0284c7; color: #fff; min-width: 150px; }
+    .btn-rec.recording { background: #dc2626; }
+    .btn-submit {
+      width: 100%;
+      background: #16a34a;
+      color: #fff;
+      padding: 15px;
+      font-size: 1.1rem;
+    }
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .status-msg { margin-top: 12px; font-weight: 600; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>?? 歌唱比賽評分系統</h1>
+
+    <div class="grid-2">
+      <div>
+        <label>參賽編號</label>
+        <input type="text" id="contestantId" placeholder="例如：01" />
+      </div>
+      <div>
+        <label>參賽者姓名</label>
+        <input type="text" id="contestantName" placeholder="請輸入姓名" />
+      </div>
+      <div>
+        <label>演唱曲目</label>
+        <input type="text" id="songTitle" placeholder="請輸入歌名" />
+      </div>
+      <div>
+        <label>評審名稱</label>
+        <input type="text" id="judgeName" placeholder="例如：評審A" />
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ai-box">
+        <div>
+          <strong>AI 客觀偵測（音準與節奏 25%）</strong>
+          <div class="live-meter" id="liveInfo">按右側按鈕即可直接在網頁錄音並分析</div>
+        </div>
+        <button type="button" class="btn-rec" id="recBtn" onclick="toggleRecord()">開始錄音</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="score-item">
+        <div class="score-header">
+          <span>1. 音準與節奏（25%）</span>
+          <span id="val-pitchRhythm">80</span>
+        </div>
+        <input type="range" id="pitchRhythm" min="0" max="100" value="80" oninput="calcTotal()" />
+      </div>
+      <div class="score-item">
+        <div class="score-header">
+          <span>2. 音色（25%）</span>
+          <span id="val-timbre">80</span>
+        </div>
+        <input type="range" id="timbre" min="0" max="100" value="80" oninput="calcTotal()" />
+      </div>
+      <div class="score-item">
+        <div class="score-header">
+          <span>3. 歌唱技巧（25%）</span>
+          <span id="val-technique">80</span>
+        </div>
+        <input type="range" id="technique" min="0" max="100" value="80" oninput="calcTotal()" />
+      </div>
+      <div class="score-item">
+        <div class="score-header">
+          <span>4. 情感詮釋（15%）</span>
+          <span id="val-emotion">80</span>
+        </div>
+        <input type="range" id="emotion" min="0" max="100" value="80" oninput="calcTotal()" />
+      </div>
+      <div class="score-item">
+        <div class="score-header">
+          <span>5. 台風與整體表現（10%）</span>
+          <span id="val-stage">80</span>
+        </div>
+        <input type="range" id="stage" min="0" max="100" value="80" oninput="calcTotal()" />
+      </div>
+      <div>
+        <label>評審短評</label>
+        <textarea id="comment" rows="2" placeholder="選填：給予演唱回饋..."></textarea>
+      </div>
+    </div>
+
+    <div class="total-box">
+      <span>加權總分</span>
+      <span id="totalScore">80.00</span>
+    </div>
+
+    <button type="button" class="btn-submit" id="submitBtn" onclick="submitScore()">送出評分至試算表</button>
+    <div class="status-msg" id="statusMsg"></div>
+  </div>
+
+  <script>
+    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbydtDwySHigtIAEnmdxiFHM5wX3s0dTtKIsl5yoEb20aMz9d3GNos0O7uy8EA6QUPzb/exec';
+
+    const weights = {
+      pitchRhythm: 0.25,
+      timbre: 0.25,
+      technique: 0.25,
+      emotion: 0.15,
+      stage: 0.10
+    };
+
+    function calcTotal() {
+      let sum = 0;
+      for (const key in weights) {
+        const val = Number(document.getElementById(key).value) || 0;
+        document.getElementById('val-' + key).textContent = val;
+        sum += val * weights[key];
+      }
+      document.getElementById('totalScore').textContent = sum.toFixed(2);
+      return Number(sum.toFixed(2));
+    }
+
+    const noteStrings = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+    function freqToNote(freq) {
+      const midi = 69 + 12 * Math.log2(freq / 440);
+      const nearestMidi = Math.round(midi);
+      const cents = Math.round((midi - nearestMidi) * 100);
+      const noteName = noteStrings[((nearestMidi % 12) + 12) % 12];
+      const octave = Math.floor(nearestMidi / 12) - 1;
+      return { name: noteName + octave, cents };
+    }
+
+    function autoCorrelate(buf, sampleRate) {
+      let rms = 0;
+      for (let i = 0; i < buf.length; i++) rms += buf[i] * buf[i];
+      rms = Math.sqrt(rms / buf.length);
+      if (rms < 0.012) return -1;
+
+      let r1 = 0, r2 = buf.length - 1, thres = 0.2;
+      for (let i = 0; i < buf.length / 2; i++) {
+        if (Math.abs(buf[i]) < thres) { r1 = i; break; }
+      }
+      for (let i = 1; i < buf.length / 2; i++) {
+        if (Math.abs(buf[buf.length - i]) < thres) { r2 = buf.length - i; break; }
+      }
+
+      const trimmed = buf.slice(r1, r2);
+      const len = trimmed.length;
+      if (len < 2) return -1;
+
+      const c = new Array(len).fill(0);
+      for (let i = 0; i < len; i++) {
+        for (let j = 0; j < len - i; j++) {
+          c[i] += trimmed[j] * trimmed[j + i];
+        }
+      }
+
+      let d = 0;
+      while (c[d] > c[d + 1]) d++;
+      let maxval = -1, maxpos = -1;
+      for (let i = d; i < len; i++) {
+        if (c[i] > maxval) { maxval = c[i]; maxpos = i; }
+      }
+      if (maxpos <= 0) return -1;
+      return sampleRate / maxpos;
+    }
+
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let micStream = null;
+    let isRecording = false;
+
+    async function toggleRecord() {
+      const btn = document.getElementById('recBtn');
+      const info = document.getElementById('liveInfo');
+
+      if (!isRecording) {
+        try {
+          micStream = await navigator.mediaDevices.getUserMedia({
+            audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false },
+            video: false
+          });
+
+          audioChunks = [];
+          mediaRecorder = new MediaRecorder(micStream);
+
+          mediaRecorder.ondataavailable = (e) => {
+            if (e.data && e.data.size > 0) audioChunks.push(e.data);
+          };
+
+          mediaRecorder.onstop = async () => {
+            if (micStream) {
+              micStream.getTracks().forEach(t => t.stop());
+              micStream = null;
+            }
+            const blob = new Blob(audioChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
+            await analyzeRecordedBlob(blob);
+          };
+
+          mediaRecorder.start();
+          isRecording = true;
+          btn.textContent = '停止錄音並計分';
+          btn.classList.add('recording');
+          info.textContent = '錄音中... 請對平板麥克風演唱，唱完按「停止錄音並計分」';
+        } catch (err) {
+          info.textContent = '無法啟動錄音：' + (err.name || '') + ' ' + (err.message || err);
+        }
+      } else {
+        isRecording = false;
+        btn.textContent = '開始錄音';
+        btn.classList.remove('recording');
+        info.textContent = '正在分析錄音音準...';
+        if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+          mediaRecorder.stop();
+        }
+      }
+    }
+
+    async function analyzeRecordedBlob(blob) {
+      const info = document.getElementById('liveInfo');
+      try {
+        const arrayBuffer = await blob.arrayBuffer();
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        const audioCtx = new AudioContextClass();
+        const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+
+        const channelData = audioBuffer.getChannelData(0);
+        const sampleRate = audioBuffer.sampleRate;
+        const frameSize = 2048;
+        const step = 4096;
+
+        let validFrames = 0;
+        let stableFrames = 0;
+        let lastFreq = null;
+        let lastNote = '';
+
+        const maxSampleIndex = Math.min(channelData.length - frameSize, sampleRate * 60);
+        for (let i = 0; i <= maxSampleIndex; i += step) {
+          const slice = channelData.subarray(i, i + frameSize);
+          const freq = autoCorrelate(slice, sampleRate);
+          if (freq > 65 && freq < 1100) {
+            validFrames++;
+            const note = freqToNote(freq);
+            lastNote = note.name;
+            if (Math.abs(note.cents) <= 35) stableFrames++;
+            if (lastFreq && Math.abs(1200 * Math.log2(freq / lastFreq)) < 120) {
+              stableFrames += 0.5;
+            }
+            lastFreq = freq;
+          }
+        }
+
+        if (audioCtx.close) await audioCtx.close();
+
+        if (validFrames > 3) {
+          const ratio = Math.min(1, stableFrames / validFrames);
+          const aiScore = Math.round(60 + ratio * 38);
+          document.getElementById('pitchRhythm').value = aiScore;
+          calcTotal();
+          info.textContent = `錄音分析完成！AI 參考分數：${aiScore} 分（有效音高片段 ${validFrames} 筆，參考音高 ${lastNote}）`;
+        } else {
+          info.textContent = '錄音中有效人聲片段較少，保留目前「音準與節奏」分數（可手動滑動微調）';
+        }
+      } catch (err) {
+        info.textContent = '音訊解碼分析失敗：' + (err && err.message ? err.message : String(err));
+      }
+    }
+
+    async function submitScore() {
+      const btn = document.getElementById('submitBtn');
+      const status = document.getElementById('statusMsg');
+
+      const payload = {
+        contestantId: document.getElementById('contestantId').value.trim(),
+        contestantName: document.getElementById('contestantName').value.trim(),
+        songTitle: document.getElementById('songTitle').value.trim(),
+        judgeName: document.getElementById('judgeName').value.trim(),
+        pitchRhythm: Number(document.getElementById('pitchRhythm').value),
+        timbre: Number(document.getElementById('timbre').value),
+        technique: Number(document.getElementById('technique').value),
+        emotion: Number(document.getElementById('emotion').value),
+        stage: Number(document.getElementById('stage').value),
+        comment: document.getElementById('comment').value.trim()
+      };
+
+      if (!payload.contestantName) {
+        status.style.color = '#dc2626';
+        status.textContent = '請先填寫「參賽者姓名」再送出！';
+        return;
+      }
+
+      btn.disabled = true;
+      status.style.color = '#334155';
+      status.textContent = '正在傳送至 Google 試算表...';
+
+      try {
+        await fetch(GAS_WEB_APP_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload)
+        });
+        btn.disabled = false;
+        status.style.color = '#16a34a';
+        status.textContent = `? 已送出！加權總分：${calcTotal().toFixed(2)}（請至試算表確認）`;
+      } catch (err) {
+        btn.disabled = false;
+        status.style.color = '#dc2626';
+        status.textContent = '? 傳送失敗：' + err.message;
+      }
+    }
+  </script>
+</body>
+</html>
