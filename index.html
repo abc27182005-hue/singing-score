@@ -28,7 +28,7 @@
       margin-bottom: 16px;
     }
     label { display: block; font-size: 0.95rem; font-weight: 600; margin-bottom: 5px; }
-    input[type="text"], textarea {
+    input[type="text"], select, textarea {
       width: 100%;
       box-sizing: border-box;
       padding: 10px 12px;
@@ -110,8 +110,8 @@
 
     <div class="grid-2">
       <div>
-        <label>參賽編號</label>
-        <input type="text" id="contestantId" placeholder="例如：01" />
+        <label>參賽編號（請選擇）</label>
+        <select id="contestantId"></select>
       </div>
       <div>
         <label>參賽者姓名</label>
@@ -122,8 +122,13 @@
         <input type="text" id="songTitle" placeholder="請輸入歌名" />
       </div>
       <div>
-        <label>評審名稱</label>
-        <input type="text" id="judgeName" placeholder="例如：評審A" />
+        <label>評審名稱（可點選或直接輸入）</label>
+        <input type="text" id="judgeName" list="judgeOptions" placeholder="點選或輸入評審姓名" />
+        <datalist id="judgeOptions">
+          <option value="評審1"></option>
+          <option value="評審2"></option>
+          <option value="評審3"></option>
+        </datalist>
       </div>
     </div>
 
@@ -190,6 +195,18 @@
 
   <script>
     const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbydtDwySHigtIAEnmdxiFHM5wX3s0dTtKIsl5yoEb20aMz9d3GNos0O7uy8EA6QUPzb/exec';
+
+    // 自動產生 01 ~ 30 號參賽編號下拉選單
+    (function initContestantSelect() {
+      const sel = document.getElementById('contestantId');
+      for (let i = 1; i <= 30; i++) {
+        const numStr = String(i).padStart(2, '0');
+        const opt = document.createElement('option');
+        opt.value = numStr;
+        opt.textContent = `${numStr} 號`;
+        sel.appendChild(opt);
+      }
+    })();
 
     const weights = {
       pitchRhythm: 0.25,
@@ -361,7 +378,7 @@
       const status = document.getElementById('statusMsg');
 
       const payload = {
-        contestantId: document.getElementById('contestantId').value.trim(),
+        contestantId: document.getElementById('contestantId').value,
         contestantName: document.getElementById('contestantName').value.trim(),
         songTitle: document.getElementById('songTitle').value.trim(),
         judgeName: document.getElementById('judgeName').value.trim(),
@@ -392,7 +409,7 @@
         });
         btn.disabled = false;
         status.style.color = '#16a34a';
-        status.textContent = `✅ 已送出！加權總分：${calcTotal().toFixed(2)}（請至試算表確認）`;
+        status.textContent = `✅ 已送出（${payload.contestantId} 號 ${payload.contestantName}）！加權總分：${calcTotal().toFixed(2)}`;
       } catch (err) {
         btn.disabled = false;
         status.style.color = '#dc2626';
